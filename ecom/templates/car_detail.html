@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .car-detail-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .car-image {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+    }
+
+    .car-info {
+        padding: 2rem;
+    }
+
+    .car-title {
+        font-size: 2rem;
+        color: var(--text-color);
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+    }
+
+    .car-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .detail-item {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .detail-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .detail-value {
+        color: var(--text-color);
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    .car-description {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .description-title {
+        color: var(--text-color);
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .description-text {
+        color: #6c757d;
+        line-height: 1.6;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .btn-edit {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="car-detail-container">
+    {% if object.image and object.image.url %}
+        <img src="{{ object.image.url }}" alt="{{ object.model }}" class="car-image">
+    {% else %}
+        <img src="/media/standard/no_image.jpg" alt="Imagem não disponível" class="car-image">
+    {% endif %}
+
+    <div class="car-info">
+        <h1 class="car-title">{{ object.brand }} {{ object.model }}</h1>
+
+        <div class="car-details">
+            <div class="detail-item">
+                <div class="detail-label">Ano de Fabricação</div>
+                <div class="detail-value">{{ object.year_fabrication }}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Ano do Modelo</div>
+                <div class="detail-value">{{ object.year_model }}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Placa</div>
+                <div class="detail-value">{{ object.plate }}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Preço</div>
+                <div class="detail-value">{{ car.formatted_price }}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Potência</div>
+                <div class="detail-value">{{ object.potency }}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Cor</div>
+                <div class="detail-value">{{ object.color }}</div>
+            </div>
+        </div>
+
+
+        {% if object.description %}
+            <div class="car-description">
+                <h3 class="description-title">Descrição</h3>
+                <p class="description-text">{{ object.description }}</p>
+            </div>
+        {% endif %}
+
+        {% if user.is_authenticated%}
+            <div class="action-buttons">
+                <a href="{% url 'car_update' pk=object.pk %}" class="btn btn-edit">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a href="{% url 'car_delete' pk=object.pk %}" class="btn btn-delete">
+                    <i class="fas fa-trash"></i> Deletar
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
