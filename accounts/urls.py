@@ -3,7 +3,6 @@ from .views import register_view, login_view, logout_view, recovery_view, reset_
 from django.conf.urls import include
 
 
-
 urlpatterns = [
     path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),

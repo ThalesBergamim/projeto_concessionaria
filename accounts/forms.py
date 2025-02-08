@@ -2,6 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 
+
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(
         label='Email',
@@ -15,15 +16,15 @@ class CustomUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         self.fields['username'].label = 'Usuário'
         self.fields['password1'].label = 'Senha'
         self.fields['password2'].label = 'Confirmar senha'
-        
+
         for fieldname in ['username', 'email', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
             self.fields[fieldname].error_messages = {
-                'required': None  
+                'required': None
             }
 
     class Meta:
@@ -34,8 +35,9 @@ class CustomUserCreationForm(UserCreationForm):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError('Este email já está em uso.')
-        return email 
-    
+        return email
+
+
 class RecoveryForm(forms.Form):
     email = forms.EmailField(
         label='Email',

@@ -6,29 +6,30 @@ from django.core.exceptions import ValidationError
 class Brand(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(
-        max_length=200, 
+        max_length=200,
         unique=True,
         verbose_name='Marca',
         error_messages={
             'unique': 'Esta marca já está cadastrada no sistema.'
         }
     )
-    
+
     def __str__(self):
         return self.name
-    
+
     def clean(self):
         if Brand.objects.filter(name__iexact=self.name).exists():
             raise ValidationError({'name': 'Esta marca já está cadastrada no sistema.'})
-    
+
     def save(self, *args, **kwargs):
-        self.full_clean() 
-        self.name = self.name.title() 
+        self.full_clean()
+        self.name = self.name.title()
         super().save(*args, **kwargs)
-    
+
     class Meta:
         verbose_name = 'Marca'
         verbose_name_plural = 'Marcas'
+
 
 class Car(models.Model):
     model = models.CharField(
@@ -36,13 +37,13 @@ class Car(models.Model):
         verbose_name='Modelo'
     )
     brand = models.ForeignKey(
-        Brand, 
-        on_delete=models.PROTECT, 
+        Brand,
+        on_delete=models.PROTECT,
         related_name='car_brand',
         verbose_name='Marca'
     )
     price = models.DecimalField(
-        max_digits=10, 
+        max_digits=10,
         decimal_places=2,
         verbose_name='Preço'
     )
@@ -64,17 +65,17 @@ class Car(models.Model):
         verbose_name='Cor',
     )
     description = models.TextField(
-        blank=True, 
+        blank=True,
         null=True,
         verbose_name='Descrição'
     )
     image = models.ImageField(
-        upload_to='cars/', 
-        blank=True, 
+        upload_to='cars/',
+        blank=True,
         null=True,
         verbose_name='Imagem'
     )
-    
+
     def __str__(self):
         return self.model
 
@@ -84,17 +85,18 @@ class Car(models.Model):
     def save(self, *args, **kwargs):
         self.plate = self.plate.upper()
         super().save(*args, **kwargs)
-        
+
     class Meta:
         verbose_name = 'Carro'
         verbose_name_plural = 'Carros'
+
 
 class CarInventory(models.Model):
     cars_count = models.IntegerField(
         verbose_name='Quantidade de Carros'
     )
     cars_value = models.DecimalField(
-        max_digits=20, 
+        max_digits=20,
         decimal_places=2,
         verbose_name='Valor Total'
     )
@@ -102,15 +104,11 @@ class CarInventory(models.Model):
         auto_now_add=True,
         verbose_name='Data de Criação'
     )
-    
+
     def __str__(self):
         return f"{self.cars_count} - {self.cars_value}"
-    
+
     class Meta:
         verbose_name = 'Inventário'
         verbose_name_plural = 'Inventários'
         ordering = ['-created_at']
-
-
-
-

@@ -1,10 +1,10 @@
 from django.urls import path
 from .views import (
-    CarsListView, 
-    NewCarView, 
-    NewbrandView, 
-    CarDetailView, 
-    CarUpdateView, 
+    CarsListView,
+    NewCarView,
+    NewbrandView,
+    CarDetailView,
+    CarUpdateView,
     CarDeleteView
 )
 
