@@ -30,8 +30,11 @@ def car_post_delete(instance, sender, **kwargs):
 @receiver(pre_save, sender=Car)
 def car_pre_save(instance, sender, **kwargs):
     if not instance.description:
-        instance.description = get_gemini_client(
+        description = get_gemini_client(
             instance.model,
             instance.brand,
             instance.year_model
         )
+        if description:
+            instance.description = description
+
